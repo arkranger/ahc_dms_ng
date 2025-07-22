@@ -1,0 +1,12 @@
+table {
+  width: 100%;
+}
+
+.example-card {
+  max-width: 1000px;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.dev/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
