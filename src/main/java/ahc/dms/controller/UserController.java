@@ -16,7 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/dms/users")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired

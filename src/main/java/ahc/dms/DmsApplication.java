@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -30,8 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
         DataSourceTransactionManagerAutoConfiguration.class // Avoids auto-creation of a default transaction manager
 })
 @EnableJpaAuditing(auditorAwareRef = "auditorAwareImpl")
-//public class DmsApplication extends SpringBootServletInitializer implements CommandLineRunner{
-public class DmsApplication implements CommandLineRunner {
+public class DmsApplication extends SpringBootServletInitializer implements CommandLineRunner{
+//public class DmsApplication implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -108,11 +109,11 @@ public class DmsApplication implements CommandLineRunner {
             User firstUser = userRepository.findByUsername("11448")
                     .orElseGet(() -> {
                         User newUser = new User();
-                        newUser.setName("Vijay Chaurasiya");
+                        newUser.setName("Amit Verma ");
                         newUser.setUsername("11448");
-                        newUser.setEmail("vijaychaurasiya@gmail.com");
+                        newUser.setEmail("amitvarmaone@gmail.com");
                         newUser.setAbout("admin");
-                        newUser.setPhone("9721308763");
+                        newUser.setPhone("8601837554");
                         newUser.setPassword(passwordEncoder.encode("1234"));
                         return userRepository.saveAndFlush(newUser);
                     });

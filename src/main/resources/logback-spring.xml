@@ -1,6 +1,6 @@
 <configuration>
 
-    <property name="LOG_PATH" value="logs" />
+    <property name="LOG_PATH" value="/opt/tomcat/logs" />
     <property name="LOG_FILE" value="${LOG_PATH}/dms.log" />
 
     <!-- Console Appender -->

@@ -6,12 +6,12 @@ public class AppConstants {
 
     // Ignore urls which are accessible to public
     public static final String[] PUBLIC_URLS = {
-            "/dms/auth/login-password",
-            "/dms/auth/login-otp",
-            "/dms/auth/register",
-            "/dms/auth/request-otp",
-            "/dms/auth/verify-forgot-otp",
-            "/dms/auth/verify-login-otp",
+            "/auth/login-password",
+            "/auth/login-otp",
+            "/auth/register",
+            "/auth/request-otp",
+            "/auth/verify-forgot-otp",
+            "/auth/verify-login-otp",
             "/actuator/**"
     };
 

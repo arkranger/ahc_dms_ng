@@ -28,7 +28,7 @@ import java.util.Random;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/dms/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     @Autowired

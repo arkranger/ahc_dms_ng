@@ -14,7 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/dms/object")
+@RequestMapping("/object")
 @PreAuthorize("hasRole('ADMIN')")
 public class ObjectController {
 
