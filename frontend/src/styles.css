@@ -1,47 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 
-html, body { height: 100%; }
+html, body { 
+  height: 100%; 
+}
+
 body { 
-    margin: 0; 
-    font-family: Roboto, "Helvetica Neue", sans-serif; 
-    background: #E8EAF6;
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  padding-bottom: 60px; /* Account for fixed footer */
 }
 
-.text-center {
-    text-align: center;
-}
-
-.ml20 {
-    margin-left: 20px !important;
-}
-.mr20 {
-    margin-right: 20px !important;
-}
-.mt20 {
-    margin-top: 20px !important;
-}
-.mb20 {
-    margin-bottom: 20px !important;
-}
-
-
-.ml10 {
-    margin-left: 10px !important;
-}
-.mr10 {
-    margin-right: 10px !important;
-}
-.mt10 {
-    margin-top: 10px !important;
-}
-.mb10 {
-    margin-bottom: 10px !important;
-}
-
-.pad10 {
-    padding: 10px !important;
-}
-
-.pad20 {
-    padding: 20px !important;
+* {
+  box-sizing: border-box;
 }

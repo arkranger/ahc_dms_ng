@@ -9,10 +9,10 @@ mvnw
 mvnw.cmd
 
 ## angular
-frontend/node_modules
-frontend/dist/
-frontend/.angular
-frontend/.vscode
+frontend2/node_modules
+frontend2/dist/
+frontend2/.angular
+frontend2/.vscode
 
 HELP.md
 target/

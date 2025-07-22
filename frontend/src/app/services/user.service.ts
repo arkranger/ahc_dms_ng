@@ -1,31 +1,42 @@
 import { Injectable } from '@angular/core';
-import { User } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
-import baseUrl from './helper';
-import { Observable } from 'rxjs';
+import { delay, Observable, of, throwError } from 'rxjs';
 
-// @Injectable signals that the service should be created and injected via Angular’s DIs.
-// Additionally, we need to specify which provider we’ll use for creating and injecting 
-// the UserService class. Otherwise, Angular won’t be able to inject it into t
-// he component classes
-@Injectable({ 
-  // makes the service a singleton throughout the application.
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+@Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private currentUser: User | null = null;
 
-  constructor(private http: HttpClient) { }
-
-
-  //add user
-
-  public addUser(user: User) {
-    return this.http.post(`${baseUrl}/user/`, user);
+  login(email: string, password: string): Observable<User> {
+    // Mock authentication - replace with actual HTTP call
+    if (email === 'test@example.com' && password === 'password') {
+      const user: User = {
+        id: 1,
+        name: 'Test User',
+        email: email
+      };
+      this.currentUser = user;
+      return of(user).pipe(delay(1000)); // Simulate network delay
+    } else {
+      return throwError(() => new Error('Invalid credentials'));
+    }
   }
 
-  public findAll(): Observable<User[]> {
-    return this.http.get<User[]>(`${baseUrl}/user/`);
+  logout(): void {
+    this.currentUser = null;
   }
 
+  getCurrentUser(): User | null {
+    return this.currentUser;
+  }
 
+  isLoggedIn(): boolean {
+    return this.currentUser !== null;
+  }
 }

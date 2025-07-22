@@ -1,0 +1,27 @@
+<div class="app-container" [class.loading]="isLoading">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loading-spinner">
+      <mat-progress-spinner 
+        mode="indeterminate" 
+        diameter="50">
+      </mat-progress-spinner>
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <!-- Main App Content -->
+  <div *ngIf="!isLoading" class="app-content">
+    <app-navbar 
+      [isLoggedIn]="isUserLoggedIn" 
+      [currentUser]="currentUser"
+      (logout)="onLogout()">
+    </app-navbar>
+    
+    <main class="main-content" [attr.data-route]="currentRoute">
+      <router-outlet></router-outlet>
+    </main>
+    
+    <app-footer></app-footer>
+  </div>
+</div>
