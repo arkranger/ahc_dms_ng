@@ -127,20 +127,4 @@ public class DmsApplication implements CommandLineRunner {
         }
     }
 
-    @Bean
-    public ApplicationListener<ApplicationReadyEvent> filterChainInspector() {
-        return event -> {
-            FilterChainProxy filterChainProxy = event.getApplicationContext()
-                    .getBean(FilterChainProxy.class);
-
-            System.out.println("\n===== SECURITY FILTER CHAIN ORDER =====");
-            filterChainProxy.getFilterChains().forEach(chain -> {
-                System.out.println("\nDefault filters:");
-                chain.getFilters().forEach(filter ->
-                        System.out.println("- " + filter.getClass().getSimpleName()));
-            });
-            System.out.println("===== END FILTER CHAIN =====");
-        };
-    }
-
 }
