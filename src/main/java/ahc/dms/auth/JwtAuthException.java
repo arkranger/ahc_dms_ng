@@ -1,4 +1,4 @@
-package ahc.dms.security;
+package ahc.dms.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
+public class JwtAuthException implements AuthenticationEntryPoint {
 
 
     @Override

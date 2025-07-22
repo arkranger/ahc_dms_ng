@@ -1,9 +1,9 @@
 package ahc.dms.config;
 
-import ahc.dms.security.CustomUserDetailsService;
-import ahc.dms.security.JwtAuthEntryPoint;
-import ahc.dms.security.JwtAuthFilter;
-import ahc.dms.security.RequestAuthFilter;
+import ahc.dms.auth.CustomUserDetailsService;
+import ahc.dms.auth.JwtAuthException;
+import ahc.dms.auth.JwtAuthFilter;
+import ahc.dms.auth.RequestAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -38,11 +37,7 @@ public class SecurityConfig {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
-    private JwtAuthEntryPoint jwtAuthEntryPoint;
-    @Autowired
-    private JwtAuthFilter jwtAuthFilter;
-    @Autowired
-    private RequestAuthFilter requestAuthFilter;
+    private JwtAuthException jwtAuthException;
 
     /*
     * permitAll() allows all requests on the specified path WITHOUT DISABLING SECURITY FILTERS.
@@ -63,17 +58,13 @@ public class SecurityConfig {
                         .requestMatchers(AppConstants.PUBLIC_URLS).permitAll()
                         .anyRequest().authenticated())
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint(jwtAuthEntryPoint))
+                        .authenticationEntryPoint(jwtAuthException))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //.httpBasic(Customizer.withDefaults()) // required when auth details are sent using forms
                 // Set custom authentication provider
                 .authenticationProvider(authenticationProvider())
-                // Add JWT filter before Spring Security's default filter
-                //.addFilterBefore(this.jwtAuthFilter, AuthorizationFilter.class)
-                .addFilterBefore(this.jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(this.requestAuthFilter, JwtAuthFilter.class);
-                //.addFilterBefore(this.requestAuthFilter, JwtAuthFilter.class);
+                .addFilterBefore(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new RequestAuthFilter(), JwtAuthFilter.class);
 
         return http.build();
     }

@@ -1,4 +1,4 @@
-package ahc.dms.security;
+package ahc.dms.auth;
 
 import ahc.dms.config.AppConstants;
 import ahc.dms.payload.dto.TokenLogDto;
@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class JwtHelper {
+public class JwtAuthHelper {
 
     @Autowired
     private TokenLogService tokenLogService;
     private SecretKey key;
-    private final Logger logger = LoggerFactory.getLogger(JwtHelper.class);
+    private final Logger logger = LoggerFactory.getLogger(JwtAuthHelper.class);
 
     // Initializes the key after the class is instantiated and the jwtSecret is injected,
     // preventing the repeated creation of the key and enhancing performance

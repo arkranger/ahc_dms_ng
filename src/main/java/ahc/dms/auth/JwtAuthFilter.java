@@ -1,4 +1,4 @@
-package ahc.dms.security;
+package ahc.dms.auth;
 
 
 import ahc.dms.config.AppConstants;
@@ -17,36 +17,28 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private JwtHelper jwtHelper;
+    private JwtAuthHelper jwtAuthHelper;
     private final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
     private static final PathMatcher PATH_MATCHER = new AntPathMatcher();
 
     @Override
-    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
-
-        logger.info("DispatcherType: {}", request.getDispatcherType());
-        // Skip if already authenticated (prevents double filtering)
-        if (SecurityContextHolder.getContext().getAuthentication() != null) {
-            logger.info("Preventing filter run from internal forwards/redirects");
-            return true;
-        }
-
-        logger.info("Checking JWT_IGNORED_URLS for : {}", request.getRequestURI());
-        return AppConstants.JWT_IGNORED_URLS.stream()
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request)
+    {
+        boolean match = AppConstants.JWT_IGNORED_URLS.stream()
                 .anyMatch(pattern -> PATH_MATCHER.match(pattern, request.getRequestURI()));
+        logger.info("Match for {} in JWT_IGNORED_URLS found : {}", request.getRequestURI(), match);
+        return match;
     }
 
     @Override
@@ -68,10 +60,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             logger.info("Extracting Token");
             token = authHeader.substring(7);
-            tokenType = this.jwtHelper.getTokenTypeFromToken(token);
+            tokenType = this.jwtAuthHelper.getTokenTypeFromToken(token);
             logger.info("Token type : {}", tokenType);
             try {
-                username = this.jwtHelper.getUsernameFromToken(token);
+                username = this.jwtAuthHelper.getUsernameFromToken(token);
             } catch (IllegalArgumentException e) {
                 logger.info("Unable to get user");
             } catch (ExpiredJwtException e) {
@@ -87,7 +79,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         //validating token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if (this.jwtHelper.validateToken(token, tokenType, userDetails)) {
+            if (this.jwtAuthHelper.validateToken(token, tokenType, userDetails)) {
                 //now set the authentication
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(

@@ -6,7 +6,7 @@ import ahc.dms.payload.dto.*;
 import ahc.dms.payload.request.JwtAuthRequest;
 import ahc.dms.payload.response.ApiResponse;
 import ahc.dms.payload.response.JwtAuthResponse;
-import ahc.dms.security.JwtHelper;
+import ahc.dms.auth.JwtAuthHelper;
 import ahc.dms.utils.OtpHelper;
 import ahc.dms.utils.ResponseUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +32,7 @@ import java.util.Set;
 public class AuthController {
 
     @Autowired
-    private JwtHelper jwtHelper;
+    private JwtAuthHelper jwtAuthHelper;
     @Autowired
     private OtpHelper otpHelper;
     @Autowired
@@ -88,7 +88,7 @@ public class AuthController {
         authUserDto.setRoles(activeRoleSet);
 
 
-        String token = this.jwtHelper.generateToken(userDetails, AppConstants.LOGIN_TOKEN);
+        String token = this.jwtAuthHelper.generateToken(userDetails, AppConstants.LOGIN_TOKEN);
 
         JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
         jwtAuthResponse.setToken(token);
@@ -114,7 +114,7 @@ public class AuthController {
         if (authStatus) {
             //returns anonymousUser since session creation policy is stateless
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(jwtAuthRequest.getUsername());
-            String token = this.jwtHelper.generateToken(userDetails, AppConstants.LOGIN_TOKEN);
+            String token = this.jwtAuthHelper.generateToken(userDetails, AppConstants.LOGIN_TOKEN);
 
             JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
             jwtAuthResponse.setToken(token);
@@ -130,8 +130,8 @@ public class AuthController {
         requestLogService.logRequest(request);
         String authHeader = request.getHeader("Authorization");
         String token = authHeader.substring(7);
-        String username = this.jwtHelper.getUsernameFromToken(token);
-        String tokenType = this.jwtHelper.getTokenTypeFromToken(token);
+        String username = this.jwtAuthHelper.getUsernameFromToken(token);
+        String tokenType = this.jwtAuthHelper.getTokenTypeFromToken(token);
         TokenLogDto tokenLogDto = tokenLogService.getToken(token, tokenType, username);
         TokenLogDto revokedToken = tokenLogService.revokeToken(tokenLogDto.getTokenId());
 
@@ -175,7 +175,7 @@ public class AuthController {
         boolean otpExists = otpLogService.verifyForgotOtp(authRequest.getUsername(), authRequest.getOtp());
         if (otpExists) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(authRequest.getUsername());
-            String token = this.jwtHelper.generateToken(userDetails, AppConstants.FORGOT_TOKEN);
+            String token = this.jwtAuthHelper.generateToken(userDetails, AppConstants.FORGOT_TOKEN);
 
             JwtAuthResponse jwtAuthResponse = new JwtAuthResponse();
             jwtAuthResponse.setToken(token);

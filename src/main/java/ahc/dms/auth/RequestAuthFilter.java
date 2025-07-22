@@ -1,4 +1,4 @@
-package ahc.dms.security;
+package ahc.dms.auth;
 
 import ahc.dms.config.AppConstants;
 import ahc.dms.dao.dms.entities.ObjectMaster;
@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
-@Component
 public class RequestAuthFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -33,11 +32,12 @@ public class RequestAuthFilter extends OncePerRequestFilter {
     private static final PathMatcher PATH_MATCHER = new AntPathMatcher();
 
     @Override
-    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
-
-        logger.info("Checking REQUEST_AUTH_IGNORED_URLS for : {}", request.getRequestURI());
-        return AppConstants.REQUEST_AUTH_IGNORED_URLS.stream()
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request)
+    {
+        boolean match = AppConstants.REQUEST_AUTH_IGNORED_URLS.stream()
                 .anyMatch(pattern -> PATH_MATCHER.match(pattern, request.getRequestURI()));
+        logger.info("Match for {} in REQUEST_AUTH_IGNORED_URLS found : {}", request.getRequestURI(), match);
+        return match;
     }
 
     @Override
