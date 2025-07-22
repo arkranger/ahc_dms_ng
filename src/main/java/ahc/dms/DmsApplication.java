@@ -108,11 +108,11 @@ public class DmsApplication implements CommandLineRunner {
             User firstUser = userRepository.findByUsername("11448")
                     .orElseGet(() -> {
                         User newUser = new User();
-                        newUser.setName("Vijay Chaurasiya");
+                        newUser.setName("Amit Verma");
                         newUser.setUsername("11448");
-                        newUser.setEmail("vijaychaurasiya@gmail.com");
+                        newUser.setEmail("amitvarmaone@gmail.com");
                         newUser.setAbout("admin");
-                        newUser.setPhone("9721308763");
+                        newUser.setPhone("8601837554");
                         newUser.setPassword(passwordEncoder.encode("1234"));
                         return userRepository.saveAndFlush(newUser);
                     });
