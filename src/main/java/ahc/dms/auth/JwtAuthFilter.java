@@ -25,12 +25,15 @@ import java.io.IOException;
 
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
-    private JwtAuthHelper jwtAuthHelper;
+    private final UserDetailsService userDetailsService;
+    private final JwtAuthHelper jwtAuthHelper;
     private final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
     private static final PathMatcher PATH_MATCHER = new AntPathMatcher();
+
+    public JwtAuthFilter(UserDetailsService userDetailsService, JwtAuthHelper jwtAuthHelper) {
+        this.userDetailsService = userDetailsService;
+        this.jwtAuthHelper = jwtAuthHelper;
+    }
 
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request)

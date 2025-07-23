@@ -1,9 +1,6 @@
 package ahc.dms.config;
 
-import ahc.dms.auth.CustomUserDetailsService;
-import ahc.dms.auth.JwtAuthException;
-import ahc.dms.auth.JwtAuthFilter;
-import ahc.dms.auth.RequestAuthFilter;
+import ahc.dms.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +35,8 @@ public class SecurityConfig {
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
     private JwtAuthException jwtAuthException;
+    @Autowired
+    private JwtAuthHelper jwtAuthHelper;
 
     /*
     * permitAll() allows all requests on the specified path WITHOUT DISABLING SECURITY FILTERS.
@@ -63,7 +62,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 // Set custom authentication provider
                 .authenticationProvider(authenticationProvider())
-                .addFilterBefore(new JwtAuthFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtAuthFilter(customUserDetailsService, jwtAuthHelper), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new RequestAuthFilter(), JwtAuthFilter.class);
 
         return http.build();
